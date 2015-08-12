@@ -8,6 +8,10 @@ CORS(app)
 
 @app.route('/')
 def hello_world():
+    return 'hello world'
+
+@app.route('/sparql')
+def do_sparql():
     auth = request.authorization
     query = request.args.get('query')
 

@@ -41,8 +41,7 @@ def do_sparql():
         r = sparql._createRequest()
         encoded = base64.b64encode(':'.join([auth.username, auth.password]))
         app.logger.debug(encoded)
-        r.add_header('Basic', encoded)
-        #r.add_header('Authorization', encoded)
+        r.add_header('Authorization', 'Basic {}'.format(encoded))
         app.logger.debug(r.headers)
 
 

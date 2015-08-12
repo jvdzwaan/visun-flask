@@ -19,7 +19,7 @@ def hello_world():
     return 'hello world'
 
 
-@app.route('/sparql')
+@app.route('/do_sparql')
 def do_sparql():
     app.logger.debug('called do_sparql')
 

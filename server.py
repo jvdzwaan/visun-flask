@@ -5,16 +5,19 @@ from flask.ext.cors import CORS
 
 import logging
 from logging import StreamHandler
-file_handler = StreamHandler()
-app.logger.setLevel(logging.DEBUG)  # set the desired logging level here
-app.logger.addHandler(file_handler)
 
 app = Flask(__name__)
 CORS(app)
 
+file_handler = StreamHandler()
+app.logger.setLevel(logging.DEBUG)  # set the desired logging level here
+app.logger.addHandler(file_handler)
+
+
 @app.route('/')
 def hello_world():
     return 'hello world'
+
 
 @app.route('/sparql')
 def do_sparql():

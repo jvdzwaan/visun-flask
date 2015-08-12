@@ -35,9 +35,13 @@ def do_sparql():
         sparql.setQuery(query)
         sparql.setCredentials(auth.username, auth.password)
         sparql.setReturnFormat(JSON)
-        app.logger.debug('doing query')
-        results = sparql.query().convert()
-        app.logger.debug('done query')
+        try:
+            app.logger.debug('doing query')
+            results = sparql.query().convert()
+        except Exception as e:
+            app.logger.debug('error!')
+            app.logger.debug(str(e))
+            results = {}
         return jsonify(**results)
     else:
         app.logger.debug('found an error')
@@ -52,5 +56,5 @@ def do_sparql():
         response.status_code = 404
         return response
 
-if __name__ == '__main__':
-    app.run()
+#if __name__ == '__main__':
+#    app.run()

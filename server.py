@@ -12,7 +12,7 @@ app = Flask(__name__)
 CORS(app)
 
 file_handler = StreamHandler()
-app.logger.setLevel(logging.DEBUG)  # set the desired logging level here
+app.logger.setLevel(logging.DEBUG)
 app.logger.addHandler(file_handler)
 
 
@@ -23,40 +23,30 @@ def hello_world():
 
 @app.route('/do_sparql')
 def do_sparql():
-    app.logger.debug('called do_sparql')
-
     auth = request.authorization
     query = request.args.get('query')
 
-    app.logger.debug(auth)
-    app.logger.debug(query)
+    #app.logger.debug(auth)
+    #app.logger.debug(query)
 
     if not auth is None and not query is None:
-        app.logger.debug('preparing to query the knowledge store')
         sparql = SPARQLWrapper('https://knowledgestore2.fbk.eu/nwr/dutchhouse/sparql')
         sparql.setQuery(query)
         sparql.setCredentials(auth.username, auth.password)
         sparql.setReturnFormat(JSON)
 
+        # Dirty hack!
         r = sparql._createRequest()
         encoded = base64.b64encode(':'.join([auth.username, auth.password]))
         app.logger.debug(encoded)
         r.add_header('Authorization', 'Basic {}'.format(encoded))
         app.logger.debug(r.headers)
 
-
         from urllib2 import urlopen
         response = urlopen(r)
         res = Wrapper.QueryResult((response, sparql.returnFormat))
         results = res.convert()
 
-        #try:
-        #    app.logger.debug('doing query')
-        #    results = sparql.query().convert()
-        #except Exception as e:
-        #    app.logger.debug('error!')
-        #    app.logger.debug(str(e))
-        #    results = {}
         return jsonify(**results)
     else:
         app.logger.debug('found an error')

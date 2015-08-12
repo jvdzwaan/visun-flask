@@ -1,7 +1,9 @@
 from flask import Flask
-from SPARQLWrapper import SPARQLWrapper, JSON
+from SPARQLWrapper import SPARQLWrapper, JSON, Wrapper
 from flask import request, jsonify
 from flask.ext.cors import CORS
+
+import base64
 
 import logging
 from logging import StreamHandler
@@ -35,13 +37,23 @@ def do_sparql():
         sparql.setQuery(query)
         sparql.setCredentials(auth.username, auth.password)
         sparql.setReturnFormat(JSON)
-        try:
-            app.logger.debug('doing query')
-            results = sparql.query().convert()
-        except Exception as e:
-            app.logger.debug('error!')
-            app.logger.debug(str(e))
-            results = {}
+
+        r = sparql._createRequest()
+        encoded = base64.b64encode(':'.join([auth.username, auth.password]))
+        r.add_header('Basic', encoded)
+
+        from urllib2 import urlopen
+        response = urlopen(r)
+        res = Wrapper.QueryResult((response, sparql.returnFormat))
+        results = res.convert()
+
+        #try:
+        #    app.logger.debug('doing query')
+        #    results = sparql.query().convert()
+        #except Exception as e:
+        #    app.logger.debug('error!')
+        #    app.logger.debug(str(e))
+        #    results = {}
         return jsonify(**results)
     else:
         app.logger.debug('found an error')

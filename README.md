@@ -1,5 +1,7 @@
 # Knowledge Store Authentication Workaround app
 
+A Flask app that proxies sparql requests to the Knowledge Store.
+
 The Flask app requires Python 2.7 and pip.
 
 The app runs on [https://shrouded-gorge-9256.herokuapp.com/](https://shrouded-gorge-9256.herokuapp.com/)

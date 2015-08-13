@@ -25,12 +25,14 @@ def hello_world():
 def do_sparql():
     auth = request.authorization
     query = request.args.get('query')
+    dataset = request.args.get('dataset')
 
     #app.logger.debug(auth)
     #app.logger.debug(query)
 
     if not auth is None and not query is None:
-        sparql = SPARQLWrapper('https://knowledgestore2.fbk.eu/nwr/dutchhouse/sparql')
+        url = 'https://knowledgestore2.fbk.eu/nwr/{}/sparql'.format(dataset)
+        sparql = SPARQLWrapper(url)
         sparql.setQuery(query)
         sparql.setCredentials(auth.username, auth.password)
         sparql.setReturnFormat(JSON)

@@ -5,15 +5,15 @@ from flask.ext.cors import CORS
 
 import base64
 
-#import logging
-#from logging import StreamHandler
+import logging
+from logging import StreamHandler
 
 app = Flask(__name__)
 CORS(app)
 
-#file_handler = StreamHandler()
-#app.logger.setLevel(logging.DEBUG)
-#app.logger.addHandler(file_handler)
+file_handler = StreamHandler()
+app.logger.setLevel(logging.DEBUG)
+app.logger.addHandler(file_handler)
 
 
 @app.route('/')
@@ -28,7 +28,7 @@ def do_sparql():
     dataset = request.args.get('dataset')
 
     #app.logger.debug(auth)
-    #app.logger.debug(query)
+    app.logger.debug(query)
 
     if not auth is None and not query is None:
         url = 'https://knowledgestore2.fbk.eu/nwr/{}/sparql'.format(dataset)
@@ -44,10 +44,16 @@ def do_sparql():
         r.add_header('Authorization', 'Basic {}'.format(encoded))
         #app.logger.debug(r.headers)
 
-        from urllib2 import urlopen
-        response = urlopen(r)
-        res = Wrapper.QueryResult((response, sparql.returnFormat))
-        results = res.convert()
+        try:
+            from urllib2 import urlopen
+            response = urlopen(r)
+            res = Wrapper.QueryResult((response, sparql.returnFormat))
+            results = res.convert()
+        except Exception as e:
+            app.logger.debug('returning error: ' + str(e))
+            response = jsonify({'status': 400, 'statusText': str(e)})
+            response.status_code = 400
+            return response
 
         return jsonify(**results)
     else:

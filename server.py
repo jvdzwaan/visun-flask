@@ -5,15 +5,15 @@ from flask.ext.cors import CORS
 
 import base64
 
-import logging
-from logging import StreamHandler
+#import logging
+#from logging import StreamHandler
 
 app = Flask(__name__)
 CORS(app)
 
-file_handler = StreamHandler()
-app.logger.setLevel(logging.DEBUG)
-app.logger.addHandler(file_handler)
+#file_handler = StreamHandler()
+#app.logger.setLevel(logging.DEBUG)
+#app.logger.addHandler(file_handler)
 
 
 @app.route('/')
@@ -40,9 +40,9 @@ def do_sparql():
         # Dirty hack!
         r = sparql._createRequest()
         encoded = base64.b64encode(':'.join([auth.username, auth.password]))
-        app.logger.debug(encoded)
+        #app.logger.debug(encoded)
         r.add_header('Authorization', 'Basic {}'.format(encoded))
-        app.logger.debug(r.headers)
+        #app.logger.debug(r.headers)
 
         from urllib2 import urlopen
         response = urlopen(r)

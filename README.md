@@ -1,14 +1,23 @@
-## Knowledge Store Authentication Workaround
+# Knowledge Store Authentication Workaround app
 
 The Flask app requires Python 2.7 and pip.
 
-### Installation
+The app runs on [https://shrouded-gorge-9256.herokuapp.com/](https://shrouded-gorge-9256.herokuapp.com/)
 
-    cd UncertaintyVisualization
+## Local Installation
+
+    git clone git@github.com:jvdzwaan/visun-flask.git
+    cd visun-flask
     pip install -r requirements.txt
 
-### Run the Flask app
+## Run
 
-In de `UncertaintyVisualization` directory run:
+In de `visun-flask` directory run:
 
     python server.py
+
+Don't forget to change the url to the Knowledge Store to `http://0.0.0.0:5000/`
+
+## Deploy on heroku
+
+[https://devcenter.heroku.com/articles/getting-started-with-python-o#deploy-your-application-to-heroku](https://devcenter.heroku.com/articles/getting-started-with-python-o#deploy-your-application-to-heroku)
